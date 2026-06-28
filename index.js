@@ -21,3 +21,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(3000, () => console.log("api on :3000"));
+
+// TODO: add request logging
