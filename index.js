@@ -11,6 +11,27 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === "/users" && req.method === "POST") {
+    let body = "";
+    req.on("data", (chunk) => (body += chunk));
+    req.on("end", () => {
+      let email;
+      try {
+        email = JSON.parse(body || "{}").email;
+      } catch {
+        email = undefined;
+      }
+      if (typeof email !== "string" || email.trim() === "") {
+        res.writeHead(400, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+        res.end(JSON.stringify({ error: "email is required" }));
+        return;
+      }
+      res.writeHead(201, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
+      res.end(JSON.stringify({ email: email.trim() }));
+    });
+    return;
+  }
+
   if (url.pathname === "/items") {
     const page = Number(url.searchParams.get("page") ?? 1);
     const size = 10;
