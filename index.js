@@ -14,8 +14,7 @@ const server = http.createServer((req, res) => {
   if (url.pathname === "/items") {
     const page = Number(url.searchParams.get("page") ?? 1);
     const size = 10;
-    // BUG (see issue): page=1 should return items 1-10, but this skips them.
-    const start = page * size;
+    const start = (page - 1) * size;
     const slice = items.slice(start, start + size);
     res.writeHead(200, { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" });
     res.end(JSON.stringify(slice));
